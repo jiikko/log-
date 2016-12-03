@@ -1,12 +1,23 @@
 class Metscola::Runner
-  def initialize
+  MASTER_CONCURRENCY = 4
+  SUMMARY_RANGE = 60
+
+  def initialize(paths)
+    @masters = []
+    @queue = Queue.new(4)
+    build_master_process!
+    paths.each { |path| @queue.push(path) }
   end
 
-  def send_events
-    result = []
-    File.open('/Users/koji/metscola/spec/files/sample.log').each_line do |log|
-      result << parser.to_hash
+  def import
+  end
+
+  private
+
+  def build_master_process!
+    @masters = []
+    1.times do
+      @masters << Master.new(@queue)
     end
-    result
   end
 end
