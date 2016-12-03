@@ -19,7 +19,9 @@ Or install it yourself as:
 
 ## Usage
 ```ruby
-metscola = Metscola.new
+metscola = Metscola.new(path: path)
+metscola.import # blocking for process
+metscola.list
 ```
 
 ## Contributing
