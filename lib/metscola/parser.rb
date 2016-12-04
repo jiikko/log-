@@ -1,17 +1,31 @@
 # f = File.open('./spec/files/sample.log').each_line.first
 class Metscola::Parser
-  attr_accessor :total_ms, :mss, :time, :method, :user_agent, :path
+  attr_reader :total_ms, :mss, :time, :method, :user_agent, :path
+  attr_writer :total_ms, :mss
 
   def initialize(log)
-    log =~ /in (\d.)+ms \(/
-    total_ms = $1
+    log =~ /in ([\d.]+)ms \(/
+    @total_ms = $1.to_f
     /([\d:T-]+)\+09:00\t+([\w.]+)\t+({.*})/ =~ log
     json = JSON.parse($3)
     @time = Time.parse($1)
-    @mss = json['messages'].scan(/(\w+): ([\d.]+)ms/)
-    @total_ms = total_ms
-    @method = json['mt']
+    @mss = json['messages'].scan(/(\w+): ([\d.]+)ms/).map { |name, ms| [name, ms.to_f] }
+    @method = json['mt'].to_sym
     @user_agent = json['ua']
     @path = json['pt']
   end
+
+  def formated_time
+    time.strftime('%Y/%m/%d %H:%M')
+  end
+
+
+  def user_agent_type
+    if @user_agent =~ /iPhone|Android|Mobile|Windows Phone/
+      :sp
+    else
+      :pc
+    end
+  end
+
 end

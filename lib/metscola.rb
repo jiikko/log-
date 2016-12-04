@@ -1,6 +1,7 @@
 require "metscola/version"
 require 'metscola/parser'
 require 'metscola/runner'
+require 'metscola/worker'
 require 'thread'
 require 'json'
 
