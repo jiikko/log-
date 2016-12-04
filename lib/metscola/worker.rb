@@ -26,13 +26,11 @@ class Metscola::Worker
     end
 
     class Request
-      def initialize(parser)
-        @parser = parser
-        @merged_count = 0
-      end
+      include Metscola::Parserable
 
-      def hash
-        [@parser.path, @parser.method].hash
+      def initialize(log)
+        super
+        @merged_count = 0
       end
 
       def merge(new_request)
@@ -42,12 +40,15 @@ class Metscola::Worker
         self
       end
 
-      def total_ms
-        @parser.total_ms
-      end
-
-      def total_ms=(value)
-        @parser.total_ms = value
+      def to_json
+        { total_ms: total_ms,
+          mss: mss,
+          time: time,
+          method: method,
+          user_agent: user_agent_type,
+          path: path,
+          merged_count: @merged_count
+        }.to_json
       end
     end
 
@@ -58,13 +59,13 @@ class Metscola::Worker
       @sp_list = []
     end
 
-    def add(parser)
-      @current_time ||= parser.time
-      if (@current_time..(@current_time + Metscola.summary_range)).include?(parser.time)
+    def add(request)
+      @current_time ||= request.time
+      if (@current_time..(@current_time + Metscola.summary_range)).include?(request.time)
         # nothing
       else
         permanent_list!
-        @current_time = parser.time
+        @current_time = request.time
       end
 
       if @map[current_time_to_s].nil?
@@ -72,7 +73,7 @@ class Metscola::Worker
         @map[current_time_to_s][:pc] = RequestList.new
         @map[current_time_to_s][:sp] = RequestList.new
       end
-      @map[current_time_to_s][parser.user_agent_type] << Request.new(parser)
+      @map[current_time_to_s][request.user_agent_type] << request
     end
 
     def list(device)
@@ -106,21 +107,35 @@ class Metscola::Worker
     end
   end
 
-  def initialize(path, position)
+  def initialize(path)
     @path = path
-    @position = position
     @summary = Summary.new
   end
 
   def work!
     File.open(@path).each_line do |line|
-      parser = Metscola::Parser.new(line)
-      @summary.add(parser)
+      request = Metscola::Worker::Summary::Request.new(line)
+      @summary.add(request)
     end
     @summary.flush!
   end
 
   def summary
     @summary
+  end
+
+  def list(device = nil)
+    case device
+    when :pc, :sp
+      summary.list(device)
+    when nil
+      summary.list(:pc).concat(summary.list(:sp))
+    end
+  end
+
+  def to_tempfile
+    tempfile = Tempfile.new
+    tempfile.write(list.map(&:to_json).join("\n"))
+    tempfile
   end
 end

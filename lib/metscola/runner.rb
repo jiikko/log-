@@ -1,23 +1,19 @@
 class Metscola::Runner
-  MASTER_CONCURRENCY = 4
-  SUMMARY_RANGE = 60
-
   def initialize(paths)
-    @masters = []
-    @queue = Queue.new(4)
-    build_master_process!
-    paths.each { |path| @queue.push(path) }
+    @paths = paths
   end
 
-  def import
-  end
-
-  private
-
-  def build_master_process!
-    @masters = []
-    1.times do
-      @masters << Master.new(@queue)
+  def work
+    if @paths.is_a?(String)
+      worker = Metscola::Worker.new(@paths)
+      worker.work!
+      worker.to_tempfile
+    else
+      Parallel.map(@paths, in_processes: Metscola::CONCURRENCY) do |path|
+        worker = Metscola::Worker.new(path)
+        worker.work!
+        worker.to_tempfile
+      end
     end
   end
 end

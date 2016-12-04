@@ -1,5 +1,5 @@
 # f = File.open('./spec/files/sample.log').each_line.first
-class Metscola::Parser
+module Metscola::Parserable
   attr_reader :total_ms, :mss, :time, :method, :user_agent, :path
   attr_writer :total_ms, :mss
 
@@ -25,5 +25,9 @@ class Metscola::Parser
     else
       :pc
     end
+  end
+
+  def hash
+    [path, method].hash
   end
 end

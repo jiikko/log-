@@ -16,9 +16,9 @@ describe Metscola::Worker do
           tempfile = Tempfile.new
           begin
             tempfile.write(logs) && tempfile.seek(0)
-            worker = Metscola::Worker.new(tempfile.path, 0)
+            worker = Metscola::Worker.new(tempfile.path)
             worker.work!
-            expect(worker.summary.list(:pc).map { |x| x.total_ms }).to eq(
+            expect(worker.list(:pc).map { |x| x.total_ms }).to eq(
               [20.0, 150.0, 200.0]
             )
           ensure
