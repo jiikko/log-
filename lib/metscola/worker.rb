@@ -35,7 +35,9 @@ class Metscola::Worker
 
       def merge(new_request)
         @merged_count = @merged_count + 1
-        # @mss
+        new_request.mss.each do |key, value|
+          self.mss[key] = (value + self.mss[key]) / 2
+        end
         self.total_ms = (self.total_ms + new_request.total_ms) / 2
         self
       end
