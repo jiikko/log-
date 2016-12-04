@@ -84,6 +84,7 @@ class Metscola::Worker
       end
     end
 
+    # 最後に取り込んだログを吐き出す
     def flush!
       permanent_list!
     end
