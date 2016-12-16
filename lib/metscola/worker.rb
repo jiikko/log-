@@ -1,4 +1,13 @@
 class Metscola::Worker
+  class Request; end
+  Request.class_eval do
+    if Metscola.target
+      include Metscola.target
+    else
+      raise 'not defined parser'
+    end
+  end
+
   class Summary
     class RequestList
       def initialize
@@ -26,7 +35,7 @@ class Metscola::Worker
     end
 
     class Request
-      include Metscola::Parserable
+      include Metscola::BaseParserable
 
       def initialize(log)
         super

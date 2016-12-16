@@ -4,16 +4,6 @@ module Metscola::Parserable
   attr_writer :total_ms, :mss
 
   def initialize(log)
-    log =~ /in ([\d.]+)ms \(/
-    @total_ms = $1.to_f
-    /([\d:T-]+)\+09:00\t+([\w.]+)\t+({.*})/o =~ log
-    json = JSON.parse($3)
-    @time = Time.parse($1)
-    @mss = json['messages'].scan(/(\w+): ([\d.]+)ms/o).
-      inject({}) { |a, v| a[v.first.to_sym] = v.last.to_f; a }
-    @method = json['mt'].to_sym
-    @user_agent = json['ua']
-    @path = json['pt']
   end
 
   def formated_time

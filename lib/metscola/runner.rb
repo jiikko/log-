@@ -1,5 +1,5 @@
 class Metscola::Runner
-  def initialize(paths)
+  def initialize(paths, target: nil)
     @paths = paths
   end
 

@@ -29,8 +29,8 @@ paths = %w[
   20160301_2.log
   20160301_3.log
 ]
-Metscola.targets << { name: :popular_log,
-  values: {
+Metscola.target = { name: :popular_log,
+  attrs: {
     total_ms: :integer,
     mss: :integer,
     time: :date,
@@ -39,21 +39,27 @@ Metscola.targets << { name: :popular_log,
     path: :string,
   },
   unique_keys: [:path, :method],
-  parser: ->(log) {
+  parser: ->(log) do
     log =~ /in ([\d.]+)ms \(/
-    @total_ms = $1.to_f
+    total_ms = $1.to_f
     /([\d:T-]+)\+09:00\t+([\w.]+)\t+({.*})/o =~ log
     json = JSON.parse($3)
-    @time = Time.parse($1)
-    @mss = json['messages'].scan(/(\w+): ([\d.]+)ms/o).
+    time = Time.parse($1)
+    mss = json['messages'].scan(/(\w+): ([\d.]+)ms/o).
       inject({}) { |a, v| a[v.first.to_sym] = v.last.to_f; a }
-    @method = json['mt'].to_sym
-    @user_agent = json['ua']
-    @path = json['pt']
-  }
+    method = json['mt'].to_sym
+    user_agent = json['ua']
+    path = json['pt']
+    { total_ms: total_ms,
+      time: time,
+      mss: mss,
+      method: method,
+      user_agent: user_agent,
+      path: path }
+    end
 }
-files = Metscola.new(paths).work
-file = Metscola.new('./spec/files/sample.log').work
+files = Metscola.new(paths, target: :popular_log).work
+file = Metscola.new('./spec/files/sample.log', target: :popular_log).work
 ```
 
 ## Contributing
