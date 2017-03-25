@@ -26,8 +26,8 @@ paths = %w[
   20160301_2.log
   20160301_3.log
 ]
-files = Metscola.new(paths).work
-file = Metscola.new('./spec/files/sample.log').work
+files = Metscola.run(paths)
+file = Metscola.run('./spec/files/sample.log')
 ```
 
 ## Contributing

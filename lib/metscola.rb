@@ -1,6 +1,5 @@
 require "metscola/version"
 require 'metscola/parserable'
-require 'metscola/runner'
 require 'metscola/worker'
 require 'metscola/file'
 require 'thread'
@@ -15,8 +14,18 @@ module Metscola
       @summary_range || SUMMARY_UNIT
     end
 
-    def new(path)
-      Metscola::Runner.new(path)
+    def run(path)
+      if path.is_a?(String)
+        worker = Metscola::Worker.new(path)
+        worker.work!
+        worker.to_tempfile
+      else
+        Parallel.map(path, in_processes: Metscola::CONCURRENCY) do |path|
+          worker = Metscola::Worker.new(path)
+          worker.work!
+          worker.to_tempfile
+        end
+      end
     end
   end
 
