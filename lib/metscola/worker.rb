@@ -110,12 +110,12 @@ class Metscola::Worker
   end
 
   def initialize(path)
-    @path = path
+    @file = Metscola::File.new(path)
     @summary = Summary.new
   end
 
   def work!
-    File.open(@path).each_line do |line|
+    @file.each_line do |line|
       request = Metscola::Worker::Summary::Request.new(line)
       @summary.add(request)
     end

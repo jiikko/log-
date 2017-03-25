@@ -2,6 +2,7 @@ require "metscola/version"
 require 'metscola/parserable'
 require 'metscola/runner'
 require 'metscola/worker'
+require 'metscola/file'
 require 'thread'
 require 'json'
 require 'parallel'

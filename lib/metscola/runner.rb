@@ -1,15 +1,15 @@
 class Metscola::Runner
-  def initialize(paths)
-    @paths = paths
+  def initialize(path)
+    @path = path
   end
 
   def work
-    if @paths.is_a?(String)
-      worker = Metscola::Worker.new(@paths)
+    if @path.is_a?(String)
+      worker = Metscola::Worker.new(@path)
       worker.work!
       worker.to_tempfile
     else
-      Parallel.map(@paths, in_processes: Metscola::CONCURRENCY) do |path|
+      Parallel.map(@path, in_processes: Metscola::CONCURRENCY) do |path|
         worker = Metscola::Worker.new(path)
         worker.work!
         worker.to_tempfile

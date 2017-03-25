@@ -1,4 +1,3 @@
-# f = File.open('./spec/files/sample.log').each_line.first
 module Metscola::Parserable
   attr_reader :total_ms, :mss, :time, :method, :user_agent, :path
   attr_writer :total_ms, :mss
