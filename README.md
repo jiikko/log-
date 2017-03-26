@@ -2,7 +2,6 @@
 * PC/SPとpath毎にレスポンスタイムの平均を出す
 
 ## Installation
-
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -36,8 +35,10 @@ file = Metscola.run('./spec/files/sample.log')
 ```
 
 ## Contributing
-
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/metscola.
+
+## License
+The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 # TODO
 * 分散モード
