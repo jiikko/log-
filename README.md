@@ -10,6 +10,13 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'metscola'
 ```
+```
+# for ruby-filemagic
+* Debian/Ubuntu
+  * libmagic-dev
+* OS X
+  * brew install libmagic
+```
 
 And then execute:
 

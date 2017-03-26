@@ -4,6 +4,7 @@ require 'metscola/worker'
 require 'metscola/file'
 require 'ruby-filemagic'
 require 'json'
+require 'time'
 require 'parallel'
 
 module Metscola

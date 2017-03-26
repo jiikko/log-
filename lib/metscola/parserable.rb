@@ -8,7 +8,8 @@ module Metscola::Parserable
     /([\d:T-]+)\+09:00\t+([\w.]+)\t+({.*})/o =~ log
     json = JSON.parse($3)
     @time = Time.parse($1)
-    @mss = json['messages'].scan(/(\w+): ([\d.]+)ms/o).
+    messages = json['messages'].is_a?(Array) ? json['messages'].join : json['messages']
+    @mss = messages.scan(/(\w+): ([\d.]+)ms/o).
       inject({}) { |a, v| a[v.first.to_sym] = v.last.to_f; a }
     @method = json['mt'].to_sym
     @user_agent = json['ua']

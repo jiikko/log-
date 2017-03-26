@@ -30,7 +30,7 @@ class Metscola::File
   def each_line_with_sort_by_time
     list = []
     @file.each_line do |line|
-      time = line.split("\t").first
+      time = line.scrub('').split("\t").first
       list << { time: time, line: line }
     end
     list.
