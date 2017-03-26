@@ -2,7 +2,22 @@ class Metscola::File
   attr_reader :file
 
   def initialize(path)
-    @file = File.open(path)
+    if [Tempfile, File].include?(path.class)
+      @file = path
+      return
+    end
+
+    # check ftype if path is String
+    @file =
+      case FileMagic.new.file(path)
+      when /gzip/
+        require 'zlib'
+        Zlib::GzipReader.open(path)
+      when /text/
+        File.open(path)
+      else
+        raise 'unkown file type.'
+      end
   end
 
   # FIXME fat memory

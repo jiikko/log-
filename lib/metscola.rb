@@ -2,7 +2,7 @@ require "metscola/version"
 require 'metscola/parserable'
 require 'metscola/worker'
 require 'metscola/file'
-require 'thread'
+require 'ruby-filemagic'
 require 'json'
 require 'parallel'
 
