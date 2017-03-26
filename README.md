@@ -1,7 +1,5 @@
 # Metscola
-* 小規模システムのログを集計する
-* 引数には、分割されたログファイルをとる
-  * エディタでオープンに時間がかかるし大抵の環境だと分割されているので
+* PC/SPとpath毎にレスポンスタイムの平均を出す
 
 ## Installation
 
@@ -45,5 +43,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 * 分散モード
   * druby?
   * s3から落として集計結果を取得する
-* 圧縮ファイルを引数にとれり
 * s3からダウンロード
