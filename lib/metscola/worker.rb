@@ -36,7 +36,7 @@ class Metscola::Worker
       def merge(new_request)
         @merged_count = @merged_count + 1
         new_request.mss.each do |key, value|
-          self.mss[key] = (value + self.mss[key]) / 2
+          self.mss[key] = ((value) + (self.mss[key] || 0)) / 2
         end
         self.total_ms = (self.total_ms + new_request.total_ms) / 2
         self
@@ -62,6 +62,10 @@ class Metscola::Worker
     end
 
     def add(request)
+      if request.not_request
+        puts request.log
+        return
+      end
       @current_time ||= request.time
       if (@current_time..(@current_time + Metscola.summary_range)).include?(request.time)
         # nothing
