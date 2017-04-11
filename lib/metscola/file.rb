@@ -2,6 +2,7 @@ class Metscola::File
   attr_reader :file
 
   def initialize(path)
+    @path = path
     if [Tempfile, File].include?(path.class)
       @file = path
       return
@@ -23,6 +24,10 @@ class Metscola::File
   # FIXME fat memory
   def each_line(&block)
     each_line_with_sort_by_time.each(&block)
+  end
+
+  def path
+    @path
   end
 
   protected

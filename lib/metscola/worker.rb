@@ -139,9 +139,13 @@ class Metscola::Worker
     end
   end
 
-  def to_tempfile
-    tempfile = Tempfile.new
-    tempfile.write(list.map(&:to_json).join("\n"))
-    tempfile
+  def to_filepath
+    file = File.open("tmp/#{@file.path.gsub('/', '_')}", 'a')
+    file.write(list.map(&:to_json).join("\n"))
+    file.path
+  end
+
+  def to_result
+    @result.write
   end
 end

@@ -3,6 +3,7 @@ require 'metscola/parserable'
 require 'metscola/worker'
 require 'metscola/file'
 require 'ruby-filemagic'
+require 'fileutils'
 require 'json'
 require 'time'
 require 'parallel'
@@ -16,17 +17,25 @@ module Metscola
     end
 
     def run(path)
+      FileUtils.rm_rf('tmp')
+      FileUtils.mkdir_p('tmp')
+
       if path.is_a?(String)
         worker = Metscola::Worker.new(path)
         worker.work!
-        worker.to_tempfile
+        worker.to_filepath
       else
         Parallel.map(path, in_processes: Metscola::CONCURRENCY) do |path|
           worker = Metscola::Worker.new(path)
           worker.work!
-          worker.to_tempfile
+          worker.to_filepath
         end
       end
+    end
+
+    def clean
+      FileUtils.rm_rf('tmp')
+      FileUtils.mkdir_p('tmp')
     end
   end
 
