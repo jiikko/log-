@@ -5,7 +5,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'metscola'
+gem 'metscola', github: 'jiikko/metscola'
 ```
 ```
 # for ruby-filemagic
