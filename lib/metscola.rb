@@ -1,3 +1,5 @@
+# -*- frozen_string_literal: true -*-
+
 require "metscola/version"
 require 'metscola/parserable'
 require 'metscola/worker'

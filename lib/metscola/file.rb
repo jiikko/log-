@@ -1,3 +1,5 @@
+# -*- frozen_string_literal: true -*-
+
 class Metscola::File
   attr_reader :file
 

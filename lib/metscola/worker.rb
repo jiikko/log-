@@ -1,3 +1,5 @@
+# -*- frozen_string_literal: true -*-
+
 class Metscola::Worker
   class Summary
     class RequestList

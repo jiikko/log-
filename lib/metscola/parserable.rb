@@ -1,3 +1,5 @@
+# -*- frozen_string_literal: true -*-
+
 module Metscola::Parserable
   attr_reader :total_ms, :mss, :time, :method, :user_agent, :path, :not_request
   attr_writer :total_ms, :mss
