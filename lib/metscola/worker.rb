@@ -65,7 +65,7 @@ class Metscola::Worker
 
     def add(request)
       if request.not_request
-        puts request.log
+        # puts request.log
         return
       end
       @current_time ||= request.time
