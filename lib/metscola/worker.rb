@@ -142,7 +142,8 @@ class Metscola::Worker
   end
 
   def to_filepath
-    file = File.open("tmp/#{@file.path.gsub('/', '_')}", 'a')
+    Metscola.tmpdir_name
+    file = File.open("#{Metscola.tmpdir_name}/#{@file.path.gsub('/', '_')}", 'a')
     file.write(list.map(&:to_json).join("\n"))
     file.path
   end

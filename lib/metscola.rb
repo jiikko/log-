@@ -19,8 +19,8 @@ module Metscola
     end
 
     def run(path)
-      FileUtils.rm_rf('tmp')
-      FileUtils.mkdir_p('tmp')
+      FileUtils.rm_rf(tmpdir_name)
+      FileUtils.mkdir_p(tmpdir_name)
 
       if path.is_a?(String)
         worker = Metscola::Worker.new(path)
@@ -36,8 +36,12 @@ module Metscola
     end
 
     def clean
-      FileUtils.rm_rf('tmp')
-      FileUtils.mkdir_p('tmp')
+      FileUtils.rm_rf(tmpdir_name)
+      FileUtils.mkdir_p(tmpdir_name)
+    end
+
+    def tmpdir_name
+      'metscola_tmp'
     end
   end
 
